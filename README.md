@@ -1,3 +1,19 @@
+## GREENHOUSE FORK!
+The purpose of this fork is _solely_ for the Datastore Controller's vendored version to overlay:
+vendor/github.com/OT-CONTAINER-KIT/redis-operator/api/redis/v1beta2/redis_webhook.go
+with nothing, because the controller runtime we run is much newer than the one this repo uses,
+and this relies on `webhook.Validator`, which is fully deprecated and removed (as of 0.22) from the version DSC uses.
+Without removing this the build fails with:
+
+```
+vendor/github.com/OT-CONTAINER-KIT/redis-operator/api/redis/v1beta2/redis_webhook.go:45:15: undefined: webhook.Validator
+```
+
+We pin controller-runtime to the version used by the rest of DSC; we
+cannot bump it just to satisfy OT's webhook shim, and we do not run an
+OT-side webhook server (DSC operates the OT operator's CRs directly).
+
+## Normal README
 <p align="center">
   <img src="./static/redis-operator-logo.svg" height="330" width="330">
 </p>
